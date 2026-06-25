@@ -256,7 +256,7 @@ segDur=2
 # 如果设置为0，则不删除切片且m3u8文件全量记录切片列表
 # Number of HLS segments retained within the m3u8 playlist index (actual chunks kept = this value + `segRetain`).
 # Set to 0 to retain all segments and record the full segment list in the m3u8 file.
-segNum=0
+segNum=3
 
 # HLS切片延迟个数，大于0将生成hls_delay.m3u8文件，0则不生成
 # The segment delay count for HLS. If greater than 0, an `hls_delay.m3u8` variant playlist is generated; if 0, it will not be generated.
@@ -268,7 +268,7 @@ segRetain=5
 
 # 是否广播 hls切片(ts/fmp4)完成通知(on_record_ts)
 # Whether to broadcast HLS segment (TS/FMP4) completion notifications via `on_record_ts`.
-broadcastRecordTs=1
+broadcastRecordTs=0
 
 # 直播hls文件删除延时，单位秒，issue: #913
 # Delay in seconds before deleting expired live HLS segments. Refer to issue: #913.
@@ -278,7 +278,7 @@ deleteDelaySec=10
 # segDur设置为0或segKeep设置为1的情况下，每个切片文件夹下会生成一个vod.m3u8文件用于点播该时间段的录像
 # When enabled, the `m3u8` playlist functions as live media, but segment chunks are permanently preserved in storage for Video On Demand (VOD).
 # If either `segKeep` is 1 or `segDur` is 0, a `vod.m3u8` playlist is also generated in each segment's folder for VOD playback of that specific recorded period.
-segKeep=1
+segKeep=0
 
 # 如果设置为1，则第一个切片长度强制设置为1个GOP。当GOP小于segDur，可以提高首屏速度
 # If set to 1, the length of the first segment is forcibly set to exactly 1 GOP.
@@ -406,7 +406,7 @@ maxReqSize=40960
 #notFound=<html><head><title>404 Not Found</title></head><body bgcolor="white"><center><h1>您访问的资源不存在！</h1></center><hr><center>ZLMediaKit-4.0</center></body></html>
 # http服务器监听端口
 # HTTP server listening port.
-port=32010
+port=80
 # http文件服务器根目录
 # 可以为相对(相对于本可执行程序目录)或绝对路径
 # HTTP file server root directory (relative or absolute path).
@@ -416,7 +416,7 @@ rootPath=./www
 sendBufSize=65536
 # https服务器监听端口
 # HTTPS server listening port.
-sslport=0
+sslport=443
 # 是否显示文件夹菜单，开启后可以浏览文件夹
 # Whether to enable directory browsing menus.
 dirMenu=1
@@ -446,7 +446,7 @@ forwarded_ip_header=
 allow_cross_domains=1
 # 允许访问http api和http文件索引的ip地址范围白名单，置空情况下不做限制
 # IP whitelist ranges allowed to access the HTTP API and file indexes. Leave empty to allow any IP without restrictions.
-allow_ip_range=::1,127.0.0.1,172.16.0.0-172.31.255.255,192.168.0.0-192.168.255.255,10.0.0.0-10.255.255.255,100.121.150.121
+allow_ip_range=::1,127.0.0.1,172.16.0.0-172.31.255.255,192.168.0.0-192.168.255.255,10.0.0.0-10.255.255.255
 
 [multicast]
 # rtp组播截止组播ip地址
@@ -494,7 +494,7 @@ handshakeSecond=15
 keepAliveSecond=15
 # rtmp服务器监听端口
 # RTMP server listening port.
-port=32012
+port=1935
 # rtmps服务器监听地址
 # RTMPS server listening port.
 sslport=0
@@ -575,8 +575,8 @@ merge_frame=1
 [rtc]
 # webrtc 信令服务器端口
 # WebRTC signaling server port.
-signalingPort=32013
-signalingSslPort=0
+signalingPort=3000
+signalingSslPort=3001
 # STUN/TURN服务器端口
 # STUN/TURN server port.
 icePort=3478
@@ -606,7 +606,7 @@ timeoutSec=15
 # 同时支持环境变量，以$开头，如"$EXTERN_IP"; 请参考：https://github.com/ZLMediaKit/ZLMediaKit/pull/1786
 # IP address(es) visible to RTC clients (typically public IPs). Separate multiple IPs with commas (',').
 # Leave empty to auto-acquire network card IPs. Also supports env vars starting with `$`, e.g., `"$EXTERN_IP"`; please refer to: https://github.com/ZLMediaKit/ZLMediaKit/pull/1786
-externIP=100.82.14.61
+externIP=
 # 当指定了interfaces,ICE服务器会使用指定网卡bind socket
 # 以解决公网IP使用弹性公网IP配置实现(部署机器无法bind该公网ip的问题)
 # 支持环境变量，以$开头，如"$PRIVATE_IP"
@@ -620,14 +620,14 @@ interfaces=
 # RTC UDP server listening port. Handles STUN/DTLS/SRTP/SRTCP data for all RTC clients.
 # Multi-threaded and supports connection migration during client network switching.
 # Note: For deployment behind a NAT, the external mapped port MUST match this port exactly.
-port=32014
+port=8000
 # rtc tcp服务器监听端口号，在udp 不通的情况下，会使用tcp传输数据
 # 该端口是多线程的，同时支持客户端网络切换导致的连接迁移
 # 需要注意的是，如果服务器在nat内，需要做端口映射时，必须确保外网映射端口跟该端口一致
 # RTC TCP server listening port. Used as a fallback if UDP is unreachable.
 # Multi-threaded and supports connection migration during client network switching.
 # Note: For deployment behind a NAT, the external mapped port MUST match this port exactly.
-tcpPort=32015
+tcpPort=8000
 # 设置remb比特率，非0时关闭twcc并开启remb。该设置在rtc推流时有效，可以控制推流画质
 # 目前已经实现twcc自动调整码率，关闭remb根据真实网络状况调整码率
 # REMB bitrate threshold. Non-zero values disable TWCC and enable REMB (effective for RTC publishing to control picture quality).
@@ -692,7 +692,7 @@ timeoutSec=5
 # 该端口是多线程的，同时支持客户端网络切换导致的连接迁移
 # SRT UDP server listening port. Handles SRT data for all clients.
 # Multi-threaded and supports connection migration during client network switching.
-port=32016
+port=9000
 # srt 协议中延迟缓存的估算参数，在握手阶段估算rtt ,然后latencyMul*rtt 为最大缓存时长，此参数越大，表示等待重传的时长就越大
 # SRT protocol delay buffer estimation parameter. Handshake estimated `RTT * latencyMul` sets the maximum buffer duration. Larger values increase wait times for retransmissions.
 latencyMul=4
@@ -731,7 +731,7 @@ handshakeSecond=15
 keepAliveSecond=15
 # rtsp服务器监听地址
 # RTSP server listening port.
-port=32011
+port=554
 # rtsps服务器监听地址
 # RTSPS server listening port.
 sslport=0
